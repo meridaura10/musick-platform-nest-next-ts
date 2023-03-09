@@ -5,6 +5,7 @@ import React from 'react'
 import { Delete, Pause, PlayArrow } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useActions } from '@/hooks/redux';
+import { env } from 'process';
 
 interface TrackItemProps {
     track: ITrack,
@@ -27,8 +28,8 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
                 }
             </IconButton>
             <img style={{
-                borderRadius: '999px'
-            }} width={70} height={70} src={'http://localhost:4444/' + track.picture} />
+                borderRadius: '10px'
+            }} alt='картинка трека' width={70} height={70} src={env.BACKEND_URL + track.picture} />
             <Grid container style={{ width: '200px', margin: '0px 20px' }} direction={'column'} >
                 <div>
                     {track.name}

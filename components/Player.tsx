@@ -6,6 +6,7 @@ import TrackProgress from "./TrackProgress";
 import { ITrack } from "@/types/track";
 import { useSelector } from "react-redux";
 import { useActions, useAppSelector } from "@/hooks/redux";
+import { env } from "process";
 let audio: HTMLAudioElement | null = null;
 const Player = () => {
     const { active, currentTime, duration, pause, volume } = useAppSelector(state => state.player)
@@ -31,7 +32,7 @@ const Player = () => {
     const setAudio = (audio: HTMLAudioElement) => {
         if (active) {
             audio.volume = volume / 100
-            audio.src = 'http://localhost:4444/' + active.audio
+            audio.src = env.BACKEND_URL + active.audio
             audio.onloadedmetadata = () => {
                 setDuraction(Math.ceil(Number(audio?.duration)))
             }

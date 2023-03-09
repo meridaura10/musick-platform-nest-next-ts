@@ -6,6 +6,7 @@ import MainLayout from '@/layouts/MainLayout'
 import { Button, Grid, TextField } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { env } from 'process'
 import React, { useState } from 'react'
 
 const Create = () => {
@@ -26,7 +27,7 @@ const Create = () => {
       formData.append('artist', artist.value)
       formData.append('picture', picture || '')
       formData.append('audio', audio || '')
-      axios.post('http://localhost:4444/tracks', formData)
+      axios.post(`${env.BACKEND_URL}/tracks`, formData)
         .then(resp => router.push('/tracks'))
         .catch(e => console.log(e))
     }

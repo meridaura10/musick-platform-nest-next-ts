@@ -5,6 +5,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { AppState } from "..";
 import { HYDRATE } from "next-redux-wrapper";
+import { env } from "process";
 
 const initialState: ITrackState = {
   error: "",
@@ -17,7 +18,7 @@ export const fetchTracks = createAsyncThunk<
   { state: AppState }
 >("track/fetchTracks", async (_, thunkAPI) => {  
   try {
-    const response = await axios.get(`http://localhost:4444/tracks`);
+    const response = await axios.get(`${env.BACKEND_URL}/tracks`);
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;

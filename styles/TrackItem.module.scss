@@ -3,6 +3,11 @@
     padding: 10px;
     display: flex;
     align-items: center;
+    transition: .2s;
+    cursor: pointer;
+    &:hover{
+        background-color: rgb(233, 217, 217);
+    }
 }
 .textArtist{
     font-size: 14px;
