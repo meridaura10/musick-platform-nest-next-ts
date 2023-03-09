@@ -27,7 +27,7 @@ export class TrackService {
   }
   async getAll(count = 10,offset = 0): Promise<Track[]> {
     const tracks = await this.trackModel.find().skip(Number(offset)).limit(Number(count));
-    return tracks;
+    return tracks
   }
   async getOne(id: ObjectId): Promise<Track> {
     const track = await this.trackModel.findById(id).populate('comments');
