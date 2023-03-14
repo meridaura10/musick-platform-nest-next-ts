@@ -10,9 +10,6 @@ import path, { join } from "path";
 
 @Module({
     imports: [
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname,  'static'),
-          }),
         MongooseModule.forRoot('mongodb+srv://meridaura:123@cluster0.qmirbuh.mongodb.net/music?retryWrites=true&w=majority'),
         TrackModule,
         FileModule,
