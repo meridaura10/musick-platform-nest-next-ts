@@ -6,7 +6,6 @@ import { GetServerSideProps } from "next";
 import { Button, Grid, TextField } from '@mui/material';
 import axios from 'axios';
 import { useInput } from '@/hooks/useInput';
-import { env } from 'process';
 
 
 const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
@@ -17,7 +16,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
 
     const addComment = async () => {
         try {
-            const res = await axios.post(`${env.BACKEND_URL}/tracks/comment`, {
+            const res = await axios.post(`${process.env.BACKEND_URL}/tracks/comment`, {
                 username: username.value,
                 text: text.value,
                 trackId: track._id,
@@ -42,7 +41,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
                     К списку
                 </Button>
                 <Grid container style={{ margin: '20px 0' }}>
-                    <img src={env.BACKEND_URL + track.picture} width={200} alt='картинка трека' height={200} />
+                    <img src={track.picture.url} width={200} alt='картинка трека' height={200} />
                     <div style={{ marginLeft: 30 }}>
                         <h1>Название трека - {track.name}</h1>
                         <h1>Исполнитель - {track.artist}</h1>
@@ -85,7 +84,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
 export default TrackPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    const response = await axios.get(`${env.BACKEND_URL}/tracks/` + params?.id)
+    const response = await axios.get(`http://localhost:4444/tracks/` + params?.id)
     return {
         props: {
             serverTrack: response.data

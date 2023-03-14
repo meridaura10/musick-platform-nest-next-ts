@@ -6,11 +6,13 @@ import TrackProgress from "./TrackProgress";
 import { ITrack } from "@/types/track";
 import { useSelector } from "react-redux";
 import { useActions, useAppSelector } from "@/hooks/redux";
-import { env } from "process";
+import axios from "axios";
 let audio: HTMLAudioElement | null = null;
 const Player = () => {
     const { active, currentTime, duration, pause, volume } = useAppSelector(state => state.player)
     const { toggleTrack, setVolume, setCurrentTime, setDuraction } = useActions()
+    
+    
     const play = () => {
         if (pause) {
             toggleTrack(false)
@@ -32,16 +34,22 @@ const Player = () => {
     const setAudio = (audio: HTMLAudioElement) => {
         if (active) {
             audio.volume = volume / 100
-            audio.src = env.BACKEND_URL + active.audio
+            audio.src = active.audio.url;
             audio.onloadedmetadata = () => {
                 setDuraction(Math.ceil(Number(audio?.duration)))
             }
             audio.ontimeupdate = () => {
                 setCurrentTime(Math.ceil(Number(audio?.currentTime)))
             }
+            audio.onended = () =>{
+                axios.post('https://musick-platform-nest-next-ts.vercel.app/tracks/listen/'+ active._id)
+                play()
+            }
         }
     }
+    useEffect(() =>{
 
+    },[])
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (audio) {
             audio.volume = Number(e.target.value) / 100

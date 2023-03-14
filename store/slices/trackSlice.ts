@@ -18,7 +18,7 @@ export const fetchTracks = createAsyncThunk<
   { state: AppState }
 >("track/fetchTracks", async (_, thunkAPI) => {  
   try {
-    const response = await axios.get(`${env.BACKEND_URL}/tracks`);
+    const response = await axios.get(`https://musick-platform-nest-next-ts.vercel.app/tracks`);
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;

@@ -10,7 +10,13 @@ export interface ITrack {
   artist: string;
   text: string;
   listens: number;
-  picture: string;
-  audio: string;
+  picture: {
+    id: string;
+    url: string;
+  };
+  audio: {
+    id: string;
+    url: string;
+  };
   comments: IComment[];
 }
