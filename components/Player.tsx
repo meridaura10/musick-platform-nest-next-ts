@@ -11,6 +11,7 @@ let audio: HTMLAudioElement | null = null;
 const Player = () => {
     const { active, currentTime, duration, pause, volume } = useAppSelector(state => state.player)
     const { toggleTrack, setVolume, setCurrentTime, setDuraction } = useActions()
+    console.log(pause);
     
     
     const play = () => {
@@ -31,7 +32,7 @@ const Player = () => {
             play()
         }
     }, [active])
-    const setAudio = (audio: HTMLAudioElement) => {
+    const setAudio = async (audio: HTMLAudioElement)  => {
         if (active) {
             audio.volume = volume / 100
             audio.src = active.audio.url;
@@ -47,9 +48,6 @@ const Player = () => {
             }
         }
     }
-    useEffect(() =>{
-
-    },[])
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (audio) {
             audio.volume = Number(e.target.value) / 100
@@ -66,7 +64,7 @@ const Player = () => {
     return (
        active &&  <div className={styles.player}>
        <IconButton onClick={play}>
-           {pause
+           {!pause
                ? <PlayArrow />
                : <Pause />
            }

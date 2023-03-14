@@ -4,7 +4,7 @@ import styles from '../styles/TrackItem.module.scss'
 import React from 'react'
 import { Delete, Pause, PlayArrow } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { useActions } from '@/hooks/redux';
+import { useActions, useAppSelector } from '@/hooks/redux';
 
 
 interface TrackItemProps {
@@ -12,19 +12,28 @@ interface TrackItemProps {
     active?: Boolean;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
     const router = useRouter()
+    const {active,pause} = useAppSelector(state => state.player)
     const { setActive, toggleTrack } = useActions()
-    const play = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+    console.log(pause);
+    
+    const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
-        setActive(track)
-        toggleTrack(true)
+        if (active) {
+            toggleTrack(!pause)       
+        }else{            
+            setActive(track)
+            toggleTrack(true)
+        }
     }
+    
     return (
         <Card onClick={() => router.push('/tracks/' + track._id)} className={styles.track}>
-            <IconButton onClick={play}>
+            <IconButton onClick={toggle}>
                 {
-                    active ? <Pause /> : <PlayArrow />
+                    Boolean(active) && !pause ? <Pause /> : <PlayArrow />
                 }
             </IconButton>
             <img style={{
