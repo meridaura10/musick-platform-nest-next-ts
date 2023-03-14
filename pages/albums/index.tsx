@@ -7,16 +7,20 @@ const index = () => {
   const [p, setP] = useState<any[]>([])
 
 
-  useEffect(() =>{
-    axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then((data: any) =>{     
+  useEffect(() => {
+    axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then((data: any) => {
       setT(data.data)
+    }).catch(e => {
+      alert(e)
+      console.log('data error', e);
+
     })
     console.log(storage);
-    
-  },[])
+
+  }, [])
   return (
     <div>
-      {t.map(e =>{
+      {t.map(e => {
         return <div key={e._id}>
           {e.text}
         </div>
