@@ -13,27 +13,23 @@ interface TrackItemProps {
 }
 
 const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
-    const router = useRouter()
     const {active,pause} = useAppSelector(state => state.player)
     const { setActive, toggleTrack } = useActions()
-
-    console.log(pause);
-    
+    const router = useRouter()    
     const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         if (active) {
             toggleTrack(!pause)       
         }else{            
             setActive(track)
-            toggleTrack(true)
+            toggleTrack(false)
         }
     }
-    
     return (
         <Card onClick={() => router.push('/tracks/' + track._id)} className={styles.track}>
             <IconButton onClick={toggle}>
                 {
-                    Boolean(active) && !pause ? <Pause /> : <PlayArrow />
+                     pause ? <PlayArrow /> : <Pause />
                 }
             </IconButton>
             <img style={{

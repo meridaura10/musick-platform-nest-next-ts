@@ -11,31 +11,28 @@ let audio: HTMLAudioElement | null = null;
 const Player = () => {
     const { active, currentTime, duration, pause, volume } = useAppSelector(state => state.player)
     const { toggleTrack, setVolume, setCurrentTime, setDuraction } = useActions()
-    console.log(pause);
-    
-    
-    const play = () => {
+
+    useEffect(() =>{
         if (pause) {
-            toggleTrack(false)
-            audio?.play()
-        } else {
-            toggleTrack(true)
             audio?.pause()
+        } else {
+            audio?.play()
         }
-    }
+    },[pause,active])
+
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
             setAudio(audio)
         }else {
             setAudio(audio)
-            play()
         }
     }, [active])
     const setAudio = async (audio: HTMLAudioElement)  => {
         if (active) {
             audio.volume = volume / 100
             audio.src = active.audio.url;
+            audio.play()
             audio.onloadedmetadata = () => {
                 setDuraction(Math.ceil(Number(audio?.duration)))
             }
@@ -44,7 +41,7 @@ const Player = () => {
             }
             audio.onended = () =>{
                 axios.post('https://musick-platform-nest-next-ts.vercel.app/tracks/listen/'+ active._id)
-                play()
+
             }
         }
     }
@@ -60,11 +57,13 @@ const Player = () => {
         }
         setCurrentTime(Number(e.target.value))
     }
-
+    const toggle = () =>{
+        toggleTrack(!pause)
+    }
     return (
        active &&  <div className={styles.player}>
-       <IconButton onClick={play}>
-           {!pause
+       <IconButton onClick={toggle}>
+           {pause
                ? <PlayArrow />
                : <Pause />
            }

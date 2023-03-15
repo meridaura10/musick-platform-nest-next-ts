@@ -14,25 +14,22 @@ import { useDispatch } from 'react-redux'
 const Index = () => {
     const router = useRouter()
     const [query,setQuery] = useState<string>('')
-    const [tracks,setTracks] = useState([])
+    const [tracks,setTracks] = useState<ITrack[]>([])
     const { error, isLoading } = useAppSelector(state => state.track)
     if (error) {
         return <MainLayout>
             <h1>{error}</h1>
         </MainLayout>
     }
-    console.log('tracksssss');
-    
     useEffect(() =>{
-       axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then(data =>{
-        setTracks(data.data)
+       axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then(({data}: {data: ITrack[]}) =>{
+        setTracks(data)
        }).catch(e =>{
         console.log(e);
-        
        })
     },[])
     const search = (e: React.ChangeEvent<HTMLInputElement>) =>{
-        
+        setQuery(e.target.value)
     }
     return (
         <div>
@@ -58,17 +55,6 @@ const Index = () => {
         </div>
     )
 }
-// export const getServerSideProps = wrapper.getServerSideProps(store => async ctx => {
-//     const dispath = store.dispatch
-
-//    const data = await dispath(fetchTracks())   
-//    const tracks = data.payload as ITrack[]
-//    dispath(setTracks(tracks))
-//     return {
-//         props: {},
-        
-//     }
-// });
 
 export default Index
 

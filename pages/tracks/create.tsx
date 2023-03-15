@@ -10,8 +10,8 @@ import axios from 'axios'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useRouter } from 'next/router'
 
-import React, { useState } from 'react'
-import { setAudioToFirebase,setImageToFirebase } from '@/utils/firebase.store';
+import React, { useEffect, useState } from 'react'
+import { setAudioToFirebase, setImageToFirebase } from '@/utils/firebase.store';
 const Create = () => {
   const router = useRouter()
   const [activeStep, setActiveStep] = useState(0)
@@ -59,26 +59,33 @@ const Create = () => {
         }
         try {
           track.audio = await setAudioToFirebase(audio)
-          track.picture = await setImageToFirebase(picture)          
-          await axios.post(`https://musick-platform-nest-next-ts.vercel.app/tracks`, track)
-          .then(resp => router.push('/tracks'))
-          .catch(e => console.log(e))
+          track.picture = await setImageToFirebase(picture)
+          console.log(track);
+
+          axios.post(`https://musick-platform-nest-next-ts-so6k.vercel.app/tracks`, track)
+            .then(resp => router.push('/tracks'))
+            .catch(e => console.log(e))
         } catch (error) {
-          console.log('помилка при завантаженні пісні',error);     
+          console.log('помилка при завантаженні пісні', error);
           alert('помилка при завантаженні пісні')
         }
       }
     }
   }
+  // useEffect(() => {
+  //   axios.post('https://musick-platform-nest-next-ts.vercel.app/tracks', {
+  //   name: 'data'
+  //   })
+  // }, [])
   const back = () => {
     setActiveStep(prev => prev - 1)
   }
   return (
     <MainLayout>
-      <Grid direction={'column'}>
+      <Grid container={true} direction={'column'}>
         <StepWrapper activeStep={activeStep}>
           {activeStep === 0 &&
-            <Grid container direction={"column"} style={{ padding: 20 }}>
+            <Grid container={true} direction={"column"} style={{ padding: 20 }}>
               <TextField
                 {...name}
                 style={{ marginTop: 10 }}
