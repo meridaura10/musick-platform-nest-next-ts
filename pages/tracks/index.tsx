@@ -6,6 +6,7 @@ import { AppDispath, wrapper } from '@/store'
 import { fetchTracks, setTracks } from '@/store/slices/trackSlice'
 import { ITrack } from '@/types/track'
 import { Box, Button, Card, Grid, TextField } from '@mui/material'
+import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -13,12 +14,18 @@ import { useDispatch } from 'react-redux'
 const Index = () => {
     const router = useRouter()
     const [query,setQuery] = useState<string>('')
-    const { error, isLoading, tracks } = useAppSelector(state => state.track)
+    const [tracks,setTracks] = useState([])
+    const { error, isLoading } = useAppSelector(state => state.track)
     if (error) {
         return <MainLayout>
             <h1>{error}</h1>
         </MainLayout>
     }
+    useEffect(() =>{
+       axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then(data =>{
+        setTracks(data.data)
+       }) 
+    },[])
     const search = (e: React.ChangeEvent<HTMLInputElement>) =>{
         
     }
@@ -46,17 +53,17 @@ const Index = () => {
         </div>
     )
 }
-export const getServerSideProps = wrapper.getServerSideProps(store => async ctx => {
-    const dispath = store.dispatch
+// export const getServerSideProps = wrapper.getServerSideProps(store => async ctx => {
+//     const dispath = store.dispatch
 
-   const data = await dispath(fetchTracks())   
-   const tracks = data.payload as ITrack[]
-   dispath(setTracks(tracks))
-    return {
-        props: {},
+//    const data = await dispath(fetchTracks())   
+//    const tracks = data.payload as ITrack[]
+//    dispath(setTracks(tracks))
+//     return {
+//         props: {},
         
-    }
-});
+//     }
+// });
 
 export default Index
 
