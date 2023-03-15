@@ -21,10 +21,15 @@ const Index = () => {
             <h1>{error}</h1>
         </MainLayout>
     }
+    console.log('tracksssss');
+    
     useEffect(() =>{
        axios.get('https://musick-platform-nest-next-ts.vercel.app/tracks').then(data =>{
         setTracks(data.data)
-       }) 
+       }).catch(e =>{
+        console.log(e);
+        
+       })
     },[])
     const search = (e: React.ChangeEvent<HTMLInputElement>) =>{
         
