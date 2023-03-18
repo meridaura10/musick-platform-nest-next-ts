@@ -21,12 +21,22 @@ export class TrackService {
     });
     return track;
   }
-  async getAll(limit = 10, offset = 0): Promise<Track[]> {
+  async getAll(
+    limit = 5,
+    offset = 0,
+  ): Promise<{
+    total: number;
+    tracks: Track[];
+  }> {
     const tracks = await this.trackModel
       .find()
       .skip(Number(offset))
       .limit(Number(limit));
-    return tracks;
+    const total = await this.trackModel.countDocuments();
+    return {
+      tracks,
+      total,
+    };
   }
   async getOne(id: ObjectId): Promise<Track> {
     const track = await this.trackModel.findById(id).populate('comments');
@@ -51,8 +61,8 @@ export class TrackService {
     return comment;
   }
   async listen(id: ObjectId) {
-    const track = await this.trackModel.findById(id)
-    track.listens += 1
-    track.save()
+    const track = await this.trackModel.findById(id);
+    track.listens += 1;
+    track.save();
   }
 }

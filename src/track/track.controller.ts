@@ -8,6 +8,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   Query,
+  Res,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -23,8 +24,10 @@ export class TrackController {
     return this.trackService.create(dto);
   }
   @Get()
-  getAll(@Query('limit') limit: number, @Query('offset') offset: number) {
-    return this.trackService.getAll(limit,offset);
+  async getAll(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: any) {
+    const {total,tracks} =  await this.trackService.getAll(limit,offset);
+    res.set('X-Total-Count', total.toString());
+    return res.send(tracks);
   }
   @Get('/search')
   search(@Query('query') query: string) {
