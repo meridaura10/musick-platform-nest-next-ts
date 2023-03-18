@@ -23,8 +23,8 @@ export class TrackController {
     return this.trackService.create(dto);
   }
   @Get()
-  getAll(@Query('count') count: number, @Query('offset') offset: number) {
-    return this.trackService.getAll(count,offset);
+  getAll(@Query('limit') limit: number, @Query('offset') offset: number) {
+    return this.trackService.getAll(limit,offset);
   }
   @Get('/search')
   search(@Query('query') query: string) {
