@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import { playerReducer } from "./slices/playerSlice";
-import { trackReducer } from "./slices/trackSlice";
+import { trackReducer } from "./slices/tracks/trackSlice";
 
 const makeStore = () =>
   configureStore({

@@ -5,6 +5,7 @@ import React from 'react'
 import { Delete, Pause, PlayArrow } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useActions, useAppSelector } from '@/hooks/redux';
+import { convertToTime } from '@/utils/convertToTime';
 
 
 interface TrackItemProps {
@@ -12,15 +13,15 @@ interface TrackItemProps {
     active?: Boolean;
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
-    const {active,pause} = useAppSelector(state => state.player)
+const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+    const { pause,currentTime,duration } = useAppSelector(state => state.player)
     const { setActive, toggleTrack } = useActions()
-    const router = useRouter()    
+    const router = useRouter()
     const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         if (active) {
-            toggleTrack(!pause)       
-        }else{            
+            toggleTrack(!pause)
+        } else {
             setActive(track)
             toggleTrack(false)
         }
@@ -29,7 +30,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
         <Card onClick={() => router.push('/tracks/' + track._id)} className={styles.track}>
             <IconButton onClick={toggle}>
                 {
-                     pause ? <PlayArrow /> : <Pause />
+                    active ? pause ? <PlayArrow /> : <Pause /> : <PlayArrow />
                 }
             </IconButton>
             <img style={{
@@ -43,7 +44,7 @@ const TrackItem: React.FC<TrackItemProps> = ({ track }) => {
                     {track.artist}
                 </div>
             </Grid>
-            {active && <div>2:42 / 03:22</div>}
+            {active && <div>{convertToTime(currentTime)} / {convertToTime(duration)}</div>}
             <IconButton onClick={e => e.stopPropagation()} style={{ marginLeft: 'auto' }}>
                 <Delete />
             </IconButton>

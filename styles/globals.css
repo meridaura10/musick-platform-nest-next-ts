@@ -1,0 +1,10 @@
+.loadingBox{
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+.endOfPage{
+    height: 10px;
+    width: 100%;
+    opacity: 0;
+}

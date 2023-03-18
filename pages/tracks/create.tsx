@@ -60,9 +60,8 @@ const Create = () => {
         try {
           track.audio = await setAudioToFirebase(audio)
           track.picture = await setImageToFirebase(picture)
-          console.log(track);
 
-          axios.post(`https://musick-platform-nest-next-ts-so6k.vercel.app/tracks`, track)
+          axios.post(`https://musick-platform-nest-next-ts.vercel.app/tracks`, track)
             .then(resp => router.push('/tracks'))
             .catch(e => console.log(e))
         } catch (error) {
@@ -72,11 +71,6 @@ const Create = () => {
       }
     }
   }
-  // useEffect(() => {
-  //   axios.post('https://musick-platform-nest-next-ts.vercel.app/tracks', {
-  //   name: 'data'
-  //   })
-  // }, [])
   const back = () => {
     setActiveStep(prev => prev - 1)
   }

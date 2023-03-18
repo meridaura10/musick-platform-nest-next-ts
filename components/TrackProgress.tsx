@@ -1,14 +1,16 @@
+import { convertToTime } from '@/utils/convertToTime';
 import React, { ChangeEvent } from 'react';
 
 interface TrackProgressProps {
     left: number;
     right: number;
+    isTime?: boolean,
     onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const TrackProgress: React.FC<TrackProgressProps> =
     ({
-        left, right, onChange
+        left, right, onChange, isTime = false
     }) => {
         return (
             <>
@@ -20,7 +22,9 @@ const TrackProgress: React.FC<TrackProgressProps> =
                         value={left}
                         onChange={onChange}
                     />
-                    <div>{left} / {right}</div>
+                    {
+                        isTime ? <div>{convertToTime(left)} / {convertToTime(right)}</div> : <div>{left} / {right}</div>
+                    }
                 </div>
             </>
         );
