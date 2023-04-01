@@ -12,8 +12,7 @@ export class Track {
   @Prop()
   artist: string;
 
-  
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   creator: mongoose.Schema.Types.ObjectId;
 
   @Prop() 
@@ -22,11 +21,10 @@ export class Track {
   @Prop()
   listens: number;
 
-
-  @Prop({ type: String })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   picture: Record<string, string>;
 
-  @Prop({ type: String })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   audio: Record<string, string>;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
