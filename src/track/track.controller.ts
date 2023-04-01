@@ -15,19 +15,19 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { ObjectId } from 'mongoose';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from 'src/auth/schemas/user-schema';
 
 @Controller('/tracks')
 export class TrackController {
   constructor(private trackService: TrackService) {}
   @Post()
-  create(@Body() dto: CreateTrackDto) {        
+  create(@Body() dto: CreateTrackDto) {
     return this.trackService.create(dto);
   }
   @Get()
-  async getAll(@Query('limit') limit: number, @Query('offset') offset: number, @Res() res: any) {
-    const {total,tracks} =  await this.trackService.getAll(limit,offset);
-    res.set('X-Total-Count', total.toString());
-    return res.send(tracks);
+  async getAll(@Query('limit') limit: number, @Query('offset') offset: number) {
+    return await this.trackService.getAll(limit, offset);
   }
   @Get('/search')
   search(@Query('query') query: string) {

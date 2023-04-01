@@ -12,11 +12,16 @@ export class Track {
   @Prop()
   artist: string;
 
-  @Prop()
+  
+  @Prop({ type: mongoose.Types.ObjectId })
+  creator: mongoose.ObjectId;
+
+  @Prop() 
   text: string;
 
   @Prop()
   listens: number;
+
 
   @Prop({ type: Object, required: true })
   picture: Record<string, string>;

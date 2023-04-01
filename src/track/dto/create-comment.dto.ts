@@ -1,7 +1,11 @@
+import { IsNotEmpty } from "class-validator";
 import {ObjectId} from "mongoose";
 
 export class CreateCommentDto {
-    readonly username: string;
-    readonly text: string;
-    readonly trackId: ObjectId;
+    @IsNotEmpty()
+     username: string;
+     @IsNotEmpty()
+     text: string;
+     @IsNotEmpty()
+     trackId: ObjectId;
 }

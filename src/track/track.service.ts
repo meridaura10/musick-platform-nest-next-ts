@@ -6,19 +6,23 @@ import { Comment, CommentDocument } from './schemas/comment.schema';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { FileService, FileType } from 'src/file/file.serveci';
+import { User, UserDocument } from 'src/auth/schemas/user-schema';
 
 @Injectable()
 export class TrackService {
   constructor(
     @InjectModel(Track.name) private trackModel: Model<TrackDocument>,
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
-    private fileService: FileService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
   async create(dto: CreateTrackDto): Promise<Track> {
+    const user = await this.userModel.findById(dto.creator)
     const track = await this.trackModel.create({
       ...dto,
       listens: 0,
     });
+    user.tracks.push(track._id)
+    user.save()
     return track;
   }
   async getAll(
