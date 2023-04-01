@@ -13,8 +13,8 @@ export class Track {
   artist: string;
 
   
-  @Prop({ type: mongoose.Types.ObjectId })
-  creator: mongoose.ObjectId;
+  @Prop()
+  creator: mongoose.Schema.Types.ObjectId;
 
   @Prop() 
   text: string;
