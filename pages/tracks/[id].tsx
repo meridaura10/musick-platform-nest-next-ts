@@ -6,22 +6,29 @@ import { GetServerSideProps } from "next";
 import { Button, Grid, TextField } from '@mui/material';
 import axios from 'axios';
 import { useInput } from '@/hooks/useInput';
+import { useAppSelector } from '@/hooks/redux';
+import AuthForm from '@/components/AuthForm';
 
 
 const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
+    const {user} = useAppSelector(state => state.auth)
     const [track, setTrack] = useState<ITrack>(serverTrack)
-    const username = useInput('')
     const text = useInput('')
     const router = useRouter()
-
+    if (!user) {
+        return <MainLayout>
+            <AuthForm text='щоб перейти на цю сторінку потрібно авторизуватись' />
+        </MainLayout>
+    }
     const addComment = async () => {
         try {
-            const res = await axios.post(`${process.env.BACKEND_URL}/tracks/comment`, {
-                username: username.value,
+            const res = await axios.post(`${process.env.BACKEND_URL}tracks/comment`, {
+                username: user?.name,
                 text: text.value,
                 trackId: track._id,
             })
             setTrack({ ...track, comments: [...track.comments, res.data] })
+            text.setValue('')
         } catch (error) {
             console.log(error);
 
@@ -32,7 +39,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
         <MainLayout
             title={'музична платформа - ' + track.name + '-' + track.artist}
         >
-            <Grid direction={'column'}>
+            <Grid  direction={'column'}>
                 <Button
                     variant={"outlined"}
                     style={{ fontSize: 32 }}
@@ -52,13 +59,6 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
                 <p>{track.text}</p>
                 <h1>Комментарии</h1>
                 <Grid container>
-
-                    <TextField
-                        {...username}
-                        label="Ваше имя"
-                        fullWidth
-
-                    />
                     <TextField
                         label="Комментарий"
                         {...text}
@@ -70,7 +70,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
                 </Grid>
                 <div>
                     {track.comments.map(comment =>
-                        <div>
+                        <div key={comment._id}>
                             <div>Автор - {comment.username}</div>
                             <div>Комментарий - {comment.text}</div>
                         </div>
@@ -84,7 +84,7 @@ const TrackPage = ({ serverTrack }: { serverTrack: ITrack }) => {
 export default TrackPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    const response = await axios.get(`http://localhost:4444/tracks/` + params?.id)
+    const response = await axios.get(`${process.env.BACKEND_URL}tracks/` + params?.id)
     return {
         props: {
             serverTrack: response.data

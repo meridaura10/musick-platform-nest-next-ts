@@ -2,12 +2,14 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import { playerReducer } from "./slices/playerSlice";
 import { trackReducer } from "./slices/tracks/trackSlice";
+import { AuthReducers } from "./slices/auth/auth.slice";
 
 const makeStore = () =>
   configureStore({
     reducer: {
       player: playerReducer,
       track: trackReducer,
+      auth: AuthReducers,
     },
     devTools: true,
   });

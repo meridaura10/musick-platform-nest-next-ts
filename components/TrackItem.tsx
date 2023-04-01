@@ -6,6 +6,7 @@ import { Delete, Pause, PlayArrow } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useActions, useAppSelector } from '@/hooks/redux';
 import { convertToTime } from '@/utils/convertToTime';
+import $api from '@/http';
 
 
 interface TrackItemProps {
@@ -14,8 +15,9 @@ interface TrackItemProps {
 }
 
 const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
+    const {user} = useAppSelector(state => state.auth)
     const { pause,currentTime,duration } = useAppSelector(state => state.player)
-    const { setActive, toggleTrack } = useActions()
+    const { setActive, toggleTrack,removeTrack } = useActions()
     const router = useRouter()
     const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
@@ -25,6 +27,13 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
             setActive(track)
             toggleTrack(false)
         }
+    }
+    const deleteTrack = (e: React.MouseEvent<HTMLButtonElement>) =>{
+        e.stopPropagation()
+        $api.delete(`/tracks/${track._id}`).catch((e: any) =>{
+            console.log(e);           
+        })
+        removeTrack(track._id)
     }
     return (
         <Card onClick={() => router.push('/tracks/' + track._id)} className={styles.track}>
@@ -45,9 +54,9 @@ const TrackItem: React.FC<TrackItemProps> = ({ track, active = false }) => {
                 </div>
             </Grid>
             {active && <div>{convertToTime(currentTime)} / {convertToTime(duration)}</div>}
-            <IconButton onClick={e => e.stopPropagation()} style={{ marginLeft: 'auto' }}>
+            {user && user.id === track.creator &&  <IconButton onClick={deleteTrack} style={{ marginLeft: 'auto' }}>
                 <Delete />
-            </IconButton>
+            </IconButton>}
         </Card>
     )
 }

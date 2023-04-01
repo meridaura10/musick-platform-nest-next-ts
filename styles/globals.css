@@ -8,3 +8,14 @@
     width: 100%;
     opacity: 0;
 }
+.textRegister{
+    cursor: pointer;
+    color: rgb(58, 58, 236);
+    transition: .2s;
+}
+.textRegister:hover{
+    color: blue;
+}
+.activeNavbarItem{
+    background-color: #f1f3f9;
+}

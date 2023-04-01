@@ -1,21 +1,27 @@
-import { AppBar, CssBaseline, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import { AppBar, CssBaseline, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
-import EmailIcon from '@mui/icons-material/Email';
-
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import SearchIcon from '@mui/icons-material/Search';
+import { useAppSelector } from '@/hooks/redux';
+import PersonIcon from '@mui/icons-material/Person';
+import LoginIcon from '@mui/icons-material/Login';
 const menuItems = [
-    {text: 'Главная', href: '/'},
-    {text: 'Список треков', href: '/tracks'},
-    {text: 'Список альбомов', href: '/albums'},
+    { text: 'головна', href: '/', image: <AllInboxIcon /> },
+    { text: 'Список треків', href: '/tracks', image: <AudiotrackIcon /> },
+    { text: 'Список альбомів', href: '/albums', image: <LibraryMusicIcon /> },
+    { text: 'пошук', href: '/search', image: <SearchIcon /> },
+    { text: 'профіль', href: '/user', image: <PersonIcon /> }
 ]
 
-export default function Navbar() {
+export default React.memo(function Navbar() {
+    const { user } = useAppSelector(state => state.auth)
     const [open, setOpen] = React.useState(false);
     const router = useRouter()
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -31,18 +37,24 @@ export default function Navbar() {
                 position="fixed"
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Persistent drawer
-                    </Typography>
+                    <Grid container  justifyContent={'space-between'} alignItems={'center'}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            музична платформа
+                        </Typography>
+                        <div>
+                            {user?.name}
+                        </div>
+                    </Grid>
                 </Toolbar>
+
             </AppBar>
             <Drawer
                 variant="persistent"
@@ -55,10 +67,10 @@ export default function Navbar() {
                     </IconButton>
                 </div>
                 <List>
-                    {menuItems.map(({text, href}, index) => (
-                        <ListItem button key={href} onClick={() => router.push(href)}>
+                    {menuItems.map(({ text, href, image }, index) => (
+                        <ListItem className={href === router.asPath ? 'activeNavbarItem' : ''} button key={href} onClick={() => router.push(href)}>
                             <ListItemIcon>
-                                {index % 2 === 0 ? <AllInboxIcon /> : <EmailIcon />}
+                                {image}
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
@@ -67,4 +79,4 @@ export default function Navbar() {
             </Drawer>
         </div>
     );
-}
+})

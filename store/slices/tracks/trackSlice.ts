@@ -6,17 +6,27 @@ import { fetchSearchTracks, fetchTracks } from "./tracksAsyncThunk";
 const initialState: ITrackState = {
   error: "",
   isLoading: false,
+  offset: 0,
+  limit: 5,
   tracks: [],
   isSearchLoading: false,
   searchError: "",
+  total: 1,
 };
 
 export const trackSlice = createSlice({
   name: "track",
   initialState,
   reducers: {
-    setTracks: (state,actions: PayloadAction<ITrack[]>) =>{
-      state.tracks = actions.payload
+    removeTrack: (state,actions) =>{
+      state.offset = state.offset - 1
+      state.total = state.total - 1
+      state.tracks = state.tracks.filter(e => e._id !== actions.payload)
+    },
+    addTrack: (state,actions: PayloadAction<ITrack>) =>{
+      state.offset = state.offset + 1
+      state.total = state.total + 1
+      state.tracks.push(actions.payload)
     }
   },
   extraReducers: (builder) => {
@@ -25,13 +35,17 @@ export const trackSlice = createSlice({
       state.isLoading = true      
      })
      .addCase(fetchTracks.fulfilled,(state,actions) =>{
-      state.tracks = actions.payload
+      state.total = actions.payload.total
+      state.tracks = [...state.tracks,...actions.payload.tracks] 
       state.isLoading = false
+      state.offset = state.offset + actions.payload.limit
       state.error = ''
      })
      .addCase(fetchTracks.rejected, (state,actions) =>{
       state.error = actions.payload as string
      })
+
+
      .addCase(fetchSearchTracks.pending, (state) =>{
       state.isSearchLoading = true      
      })
@@ -47,5 +61,4 @@ export const trackSlice = createSlice({
 });
 
 export const trackActions = { fetchTracks, ...trackSlice.actions };
-export const {setTracks} = trackSlice.actions
 export const trackReducer = trackSlice.reducer;

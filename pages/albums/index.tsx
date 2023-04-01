@@ -1,8 +1,11 @@
+import MainLayout from '@/layouts/MainLayout'
 import React from 'react'
 
-const Index = () => {
+const Index = () => {  
   return (
-    <div>index</div>
+   <MainLayout>
+    albums
+   </MainLayout>
   )
 }
 

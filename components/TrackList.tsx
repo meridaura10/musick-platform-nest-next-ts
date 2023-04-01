@@ -11,7 +11,7 @@ const TrackList:React.FC<TrackListProps> = ({tracks}) => {
   const {active} = useAppSelector(state => state.player)
   return (
     <Grid container direction={'column'}>
-        <Box p={2}>
+        <Box>
             {tracks.map(track => <TrackItem active={active?._id === track._id} key={track._id} track={track}/>)}
         </Box>
     </Grid>

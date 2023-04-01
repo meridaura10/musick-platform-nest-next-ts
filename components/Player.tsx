@@ -1,6 +1,6 @@
 import { Pause, PlayArrow, VolumeUp } from "@mui/icons-material";
 import { Grid, IconButton } from "@mui/material";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from '../styles/Player.module.scss'
 import TrackProgress from "./TrackProgress";
 import { ITrack } from "@/types/track";
@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useActions, useAppSelector } from "@/hooks/redux";
 import axios from "axios";
 let audio: HTMLAudioElement | null = null;
-const Player = () => {
+const Player = React.memo(() => {
     const { active, currentTime, duration, pause, volume } = useAppSelector(state => state.player)
     const { tracks } = useAppSelector(state => state.track)
     const { toggleTrack, setVolume, setCurrentTime, setDuraction, setActive } = useActions()
@@ -41,7 +41,7 @@ const Player = () => {
                 setCurrentTime(Math.ceil(Number(audio?.currentTime)))
             }
             audio.onended = () => {
-                axios.post('https://musick-platform-nest-next-ts.vercel.app/tracks/listen/' + active._id)
+                axios.post(`${process.env.BACKEND_URL}tracks/listen/` + active._id)
                 const activeTrackIndex = tracks.findIndex(t => t._id === active._id)
                 if (tracks.hasOwnProperty(activeTrackIndex + 1)) {
                     setActive(tracks[activeTrackIndex + 1])
@@ -84,6 +84,6 @@ const Player = () => {
             <TrackProgress left={volume} right={100} onChange={changeVolume} />
         </div>
     );
-};
+});
 
 export default Player;

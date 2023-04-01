@@ -12,14 +12,25 @@ import { useRouter } from 'next/router'
 
 import React, { useEffect, useState } from 'react'
 import { setAudioToFirebase, setImageToFirebase } from '@/utils/firebase.store';
+import { useActions, useAppSelector } from '@/hooks/redux';
+import AuthForm from '@/components/AuthForm';
+import $api from '@/http';
+import { ITrack } from '@/types/track';
 const Create = () => {
   const router = useRouter()
+  const {user} = useAppSelector(state => state.auth)
   const [activeStep, setActiveStep] = useState(0)
   const [picture, setPicture] = useState<null | File>(null)
+  const {addTrack} = useActions()
   const [audio, setAudio] = useState<null | File>(null)
   const name = useInput('')
   const artist = useInput('')
   const text = useInput('')
+  if (!user) {
+    return <MainLayout>
+      <AuthForm text='щоб створити пісню потрібно авторизуватись' />
+    </MainLayout>
+  }
   const disabled = () => {
     if (activeStep === 0) {
       return name.value.trim() && text.value.trim() && artist.value.trim() ? false : true
@@ -32,6 +43,7 @@ const Create = () => {
     }
     return true
   }
+
   const disabledNext = disabled()
   const next = async () => {
     if (activeStep < 2) {
@@ -61,8 +73,16 @@ const Create = () => {
           track.audio = await setAudioToFirebase(audio)
           track.picture = await setImageToFirebase(picture)
 
-          axios.post(`https://musick-platform-nest-next-ts.vercel.app/tracks`, track)
-            .then(resp => router.push('/tracks'))
+          $api.post(`/tracks`, {
+            ...track,
+            creator: user.id,
+          })
+            .then(res => {
+              console.log(res.data);
+              
+              addTrack(res.data as ITrack)
+              router.push('/tracks')
+            })
             .catch(e => console.log(e))
         } catch (error) {
           console.log('помилка при завантаженні пісні', error);

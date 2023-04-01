@@ -6,4 +6,7 @@ export interface ITrackState {
   isSearchLoading: boolean,
   error: string;
   searchError: string,
+  offset: number,
+  limit: number,
+  total: number,
 }

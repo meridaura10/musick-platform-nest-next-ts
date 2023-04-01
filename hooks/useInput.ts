@@ -7,6 +7,6 @@ export const useInput = (initialValue: string) =>{
         setValue(e.target.value)
     }
     return {
-        value,onChange
+        value,onChange,setValue
     }
 }

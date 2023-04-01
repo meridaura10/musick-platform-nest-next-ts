@@ -10,6 +10,7 @@ export interface ITrack {
   artist: string;
   text: string;
   listens: number;
+  creator: string;
   picture: {
     id: string;
     url: string;
