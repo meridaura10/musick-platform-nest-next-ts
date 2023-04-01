@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 const start = async () => {
   try {
@@ -8,7 +7,7 @@ const start = async () => {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors({
-      origin: 'https://musick-platform-nest-next-ts-front-end-git-client-meridaura10.vercel.app',
+      origin: 'http://localhost:3000',
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
