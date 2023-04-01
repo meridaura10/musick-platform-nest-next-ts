@@ -7,7 +7,7 @@ const start = async () => {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors({
-      origin: 'http://localhost:3000',
+      origin: 'https://musick-platform-nest-next-ts.vercel.app',
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
     });
