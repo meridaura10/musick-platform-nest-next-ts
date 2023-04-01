@@ -23,10 +23,10 @@ export class Track {
   listens: number;
 
 
-  @Prop({ type: mongoose.Types.ObjectId, required: true })
+  @Prop({ type: String })
   picture: Record<string, string>;
 
-  @Prop({ type: mongoose.Types.ObjectId, required: true })
+  @Prop({ type: String })
   audio: Record<string, string>;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
