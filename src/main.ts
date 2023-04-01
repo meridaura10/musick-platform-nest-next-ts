@@ -6,7 +6,6 @@ const start = async () => {
   try {
     const PORT = process.env.PORT || 4444;
     const app = await NestFactory.create(AppModule);
-    //  app.use(cookieParser())
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors({
       origin: 'https://musick-platform-nest-next-ts-front-end-git-client-meridaura10.vercel.app',
@@ -20,4 +19,4 @@ const start = async () => {
     console.log(error);
   }
 };
-start()
+start() 
