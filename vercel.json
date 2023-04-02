@@ -11,7 +11,7 @@
         "src": "/.*",
         "dest": "src/main.ts",
         "headers": {
-          "Access-Control-Allow-Origin": "https://musick-platform-nest-next-ts-front-end-git-client-meridaura10.vercel.app"     
+          "Access-Control-Allow-Origin": "https://musick-platform-nest-next-ts.vercel.app"     
         }
       }
     ]
